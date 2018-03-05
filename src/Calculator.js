@@ -1,44 +1,126 @@
 import React, { Component } from 'react';
+import Button from './Button';
+import Result from './Result';
 
 import './Calculator.css';
+
+const keyOperatorMapping = (value) => {
+  if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'].includes(value)) {
+    return "number";
+  } else if (['+', '-', '/', '%', 'x'].includes(value)) {
+    return 'operator';
+  } else if (['=', 'Enter'].includes(value)) {
+    return 'equals';
+  } else  {
+    return null;
+  }
+}
 
 class Calculator extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      result: '',
+      buffer: '',
+      operator: null,
+      newCalculation: true,
+    };
+  }
+
+  performCalculation = {
+    '+': (op1, op2) => {
+      return op1 + op2;
+    },
+    '-': (op1, op2) => {
+      return op1 - op2;
+    },
+    'x': (op1, op2) => {
+      return op1 * op2;
+    },
+    '/': (op1, op2) => {
+      return op1 / op2;
+    },
+    '%': (op1, op2) => {
+      return op1 % op2;
+    },
+  }
+
+  handleClick = (buttonType, value) => {
+    const {buffer, result, operator, newCalculation} = this.state;
+
+    if (buttonType === 'number') {
+      this.setState({
+        result: newCalculation ? value : result + value,
+        newCalculation: false,
+      });
+    } else if (buttonType === 'operator') {
+      this.setState({
+        buffer: result.length ? result : 0,
+        operator: value,
+        newCalculation: true,
+      });
+    } else if (buttonType === 'delete') {
+      this.setState({
+        result: '',
+        buffer: '',
+        operator: null,
+        newCalculation: true,
+      });
+    } else if (buttonType === 'equals') {
+      this.setState({
+        result: this.performCalculation[operator](Number(buffer), Number(result)) + '',
+        newCalculation: true,
+      });
+    }
+  }
+
+  handleKeyPress = (event) => {
+    const operator = keyOperatorMapping(event.key);
+    if (operator != null) {
+      this.handleClick(operator, event.key);
+    }
+  }
+
+  componentWillMount() {
+    this.keyPressHandle = document.addEventListener('keypress', this.handleKeyPress, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keypress', this.handleKeyPress);
   }
 
   render() {
     return (
       <div id="background">
-        <div id="result"></div>
+        <Result result={this.state.result} />
         <div id="main">
           <div id="first-rows">
-            <button className="del-bg" id="delete">Del</button>
-            <button value="%" className="btn-style operator opera-bg fall-back">%</button>
-            <button value="+" className="btn-style opera-bg value align operator">+</button>
+            <Button type="delete" value="Del" className="btn-style-wide" onClick={this.handleClick}/>
+            <Button type="operator" value="%" onClick={this.handleClick}/>
+            <Button type="operator" value="+" onClick={this.handleClick}/>
           </div>
           <div className="rows">
-            <button value="7" className="btn-style num-bg num first-child">7</button>
-            <button value="8" className="btn-style num-bg num">8</button>
-            <button value="9" className="btn-style num-bg num">9</button>
-            <button value="-" className="btn-style opera-bg operator">-</button>
+            <Button type="number" value="7" className="first-child" onClick={this.handleClick}/>
+            <Button type="number" value="8" onClick={this.handleClick}/>
+            <Button type="number" value="9" onClick={this.handleClick}/>
+            <Button type="operator" value="-" onClick={this.handleClick}/>
           </div>
           <div className="rows">
-            <button value="4" className="btn-style num-bg num first-child">4</button>
-            <button value="5" className="btn-style num-bg num">5</button>
-            <button value="6" className="btn-style num-bg num">6</button>
-            <button value="*" className="btn-style opera-bg operator">x</button>
+            <Button type="number" value="4" className="first-child" onClick={this.handleClick}/>
+            <Button type="number" value="5" onClick={this.handleClick}/>
+            <Button type="number" value="6" onClick={this.handleClick}/>
+            <Button type="operator" value="x" onClick={this.handleClick}/>
           </div>
           <div className="rows">
-            <button value="1" className="btn-style num-bg num first-child">1</button>
-            <button value="2" className="btn-style num-bg num">2</button>
-            <button value="3" className="btn-style num-bg num">3</button>
-            <button value="/" className="btn-style opera-bg operator">/</button>
+            <Button type="number" value="1" className="first-child" onClick={this.handleClick}/>
+            <Button type="number" value="2" onClick={this.handleClick}/>
+            <Button type="number" value="3" onClick={this.handleClick}/>
+            <Button type="operator" value="/" onClick={this.handleClick}/>
           </div>
           <div className="rows">
-            <button value="0" className="num-bg zero" id="delete">0</button>
-            <button value="." className="btn-style num-bg period fall-back">.</button>
-            <button value="=" id="eqn-bg" className="eqn align">=</button>
+            <Button type="number" value="0" className="first-child btn-style-wide" onClick={this.handleClick}/>
+            <Button type="number" value="." onClick={this.handleClick}/>
+            <Button type="equals" value="=" onClick={this.handleClick}/>
           </div>
         </div>
       </div>
