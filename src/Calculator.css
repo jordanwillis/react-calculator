@@ -3,35 +3,11 @@ body {
 }
 
 #background {
-  width: 300px;
+  width: 270px;
   height: 400px;
   background: gray;
   margin: 50px auto;
   transition: all 2s ease;
-}
-
-#result {
-  display: block;
-  font-family: sans-serif;
-  width: 230px;
-  height: 40px;
-  margin: 10px auto;
-  text-align: right;
-  border: 0;
-  background: #3b3535;
-  color: #fff;
-  padding-top: 20px;
-  font-size: 20px;
-  margin-left: 25px;
-  outline: none;
-  overflow: hidden;
-  letter-spacing: 4px;
-  position: relative;
-  top: 10px;
-}
-
-#result:hover {
-  cursor: text;
 }
 
 #first-rows {
@@ -45,28 +21,14 @@ body {
   margin-top: 10px;
 }
 
-/* Aligning the division and dot button properly */
-
 .fall-back {
   margin-left: 3px !important;
 }
-
-
-/* Aligning the addition and equals to button properly */
 
 .align {
   margin-left: 6px !important;
 }
 
-
-/* Button styling */
-
-
-
 .first-child {
   margin-left: 25px;
 }
-
-
-/* Adding background color to the number values */
-

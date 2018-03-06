@@ -20,7 +20,7 @@ class Calculator extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      result: '',
+      displayValue: '',
       buffer: '',
       operator: null,
       newCalculation: true,
@@ -46,29 +46,29 @@ class Calculator extends Component {
   }
 
   handleClick = (buttonType, value) => {
-    const {buffer, result, operator, newCalculation} = this.state;
+    const {buffer, displayValue, operator, newCalculation} = this.state;
 
     if (buttonType === 'number') {
       this.setState({
-        result: newCalculation ? value : result + value,
+        displayValue: newCalculation ? value : displayValue + value,
         newCalculation: false,
       });
     } else if (buttonType === 'operator') {
       this.setState({
-        buffer: result.length ? result : 0,
+        buffer: displayValue.length ? displayValue : 0,
         operator: value,
         newCalculation: true,
       });
     } else if (buttonType === 'delete') {
       this.setState({
-        result: '',
+        displayValue: '',
         buffer: '',
         operator: null,
         newCalculation: true,
       });
     } else if (buttonType === 'equals') {
       this.setState({
-        result: this.performCalculation[operator](Number(buffer), Number(result)) + '',
+        displayValue: this.performCalculation[operator](Number(buffer), Number(displayValue)) + '',
         newCalculation: true,
       });
     }
@@ -92,7 +92,7 @@ class Calculator extends Component {
   render() {
     return (
       <div id="background">
-        <Result result={this.state.result} />
+        <Result result={this.state.displayValue} />
         <div id="main">
           <div id="first-rows">
             <Button type="delete" value="Del" className="btn-style-wide" onClick={this.handleClick}/>
